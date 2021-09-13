@@ -35,18 +35,15 @@ def _main(arguments: Optional[Sequence[str]] = None) -> None:
         of notes to slides is one to one; however, this can be
         overridden with the --map option which specifies a file that
         lists the slide numbers for each slide in the notes file..
-        """
-    )
+        """)
     parser.add_argument("pdf", type=argparse.FileType("rb"),
                         help="The path to the presentation to convert")
     parser.add_argument("-i", "--interactive", action="store_true",
                         help="Ask before overwriting an existing file")
     parser.add_argument("-m", "--map", type=argparse.FileType("r"),
                         help=argparse.SUPPRESS)
-                        # help="The path to the note mapping")
     parser.add_argument("-n", "--notes", type=argparse.FileType("rb"),
                         help=argparse.SUPPRESS)
-                        # help="The path to the presentation notes")
     parser.add_argument("-o", "--output",
                         help="The path to the output PowerPoint file.")
     parser.add_argument("-v", "--verbose", action="count",
@@ -96,6 +93,6 @@ def _main(arguments: Optional[Sequence[str]] = None) -> None:
                 sys.exit(f"Could not convert '{_}' on line {line} to "
                          "an integer")
 
-    convert(args.pdf.name, output, 
+    convert(args.pdf.name, output,
             args.notes if args.notes is None else args.notes.name,
             )

@@ -36,7 +36,7 @@ ASPECT_RATIOS = {
 
 
 def extract_aspect_ratio(path: Union[PathLike, str],
-                         timeout: Optional[int] = None,
+                         timeout: Optional[float] = None,
                          ) -> str:
     """Extract the aspect ratio from the PDF.
 
@@ -81,7 +81,7 @@ def extract_aspect_ratio(path: Union[PathLike, str],
     logger = logging.getLogger(__name__ + ".extract_aspect_ratio")
     try:
         proc.check_returncode()
-    except:
+    except Exception:
         logger.error(f"Error message: '{proc.stderr}'")
         raise
 
@@ -108,7 +108,7 @@ def extract_aspect_ratio(path: Union[PathLike, str],
 
 
 def extract_metadata(path: Union[PathLike, str],
-                     timeout: Optional[int] = None,
+                     timeout: Optional[float] = None,
                      ) -> Tuple[str, str, str, str]:
     """Extract the metadata from the PDF.
 
@@ -155,7 +155,7 @@ def extract_metadata(path: Union[PathLike, str],
     logger = logging.getLogger(__name__ + ".extract_metadata")
     try:
         proc.check_returncode()
-    except:
+    except Exception:
         logger.error(f"Error message: '{proc.stderr}'")
         raise
 
@@ -164,30 +164,31 @@ def extract_metadata(path: Union[PathLike, str],
     keywords = ""
     author = ""
     for line in proc.stdout.splitlines():
-        match = re.match(f"Title:\s*(.*)", line, re.IGNORECASE)
+        match = re.match(r"Title:\s*(.*)", line, re.IGNORECASE)
         if match:
             title = match.group(1)
             continue
 
-        match = re.match(f"Subject:\s*(.*)", line, re.IGNORECASE)
+        match = re.match(r"Subject:\s*(.*)", line, re.IGNORECASE)
         if match:
             subject = match.group(1)
             continue
 
-        match = re.match(f"Keywords:\s*(.*)", line, re.IGNORECASE)
+        match = re.match(r"Keywords:\s*(.*)", line, re.IGNORECASE)
         if match:
             keywords = match.group(1)
             continue
 
-        match = re.match(f"Author:\s*(.*)", line, re.IGNORECASE)
+        match = re.match(r"Author:\s*(.*)", line, re.IGNORECASE)
         if match:
             author = match.group(1)
             continue
 
     return title, subject, keywords, author
 
+
 def extract_notes(path: Union[PathLike, str],
-                  timeout: Optional[int] = None,
+                  timeout: Optional[float] = None,
                   ) -> List[str]:
     """Extract the notes from the PDF.
 
@@ -227,7 +228,7 @@ def extract_notes(path: Union[PathLike, str],
                           )
     try:
         proc.check_returncode()
-    except:
+    except Exception:
         logger = logging.getLogger(__name__ + ".extract_notes")
         logger.error(f"Error message: '{proc.stderr}'")
         raise
@@ -237,7 +238,7 @@ def extract_notes(path: Union[PathLike, str],
 
 def extract_slides(path: Union[PathLike, str],
                    directory: str = os.curdir,
-                   timeout: Optional[int] = None,
+                   timeout: Optional[float] = None,
                    ) -> List[str]:
     """Extract the slides from the PDF.
 
@@ -284,7 +285,7 @@ def extract_slides(path: Union[PathLike, str],
     logger = logging.getLogger(__name__ + ".extract_slides")
     try:
         proc.check_returncode()
-    except:
+    except Exception:
         logger.error(f"Error message: '{proc.stderr}'")
         raise
 
@@ -332,18 +333,17 @@ class Presentation:
 
         def __init__(self,
                      path: Union[os.PathLike, str],
-                     etree: Optional[lxml.etree.ElementTree] = None,
-                     ): 
+                     ):
             self.path = pathlib.Path(path)
-            self.etree = etree
-            self._template: Optional[lxml.etree.Element] = None
+            self.etree: lxml.etree._ElementTree
+            self._template: lxml.etree._Element
 
         @property
-        def template(self) -> Optional[lxml.etree.Element]:
+        def template(self) -> lxml.etree._Element:
             """Return a duplicate of the template for editing"""
             return lxml.etree.Element(
                 self._template.tag,
-                {k: v for k, v in self._template.attrib.items()}
+                {str(k): str(v) for k, v in self._template.attrib.items()}
             )
 
         def load(self):
@@ -443,10 +443,12 @@ class Presentation:
 
         self._presentation_xml.load()
         root = self._presentation_xml.etree.getroot()
+        # The silencing of mypy is due to the invariance of the keys.
+        # https://github.com/lxml/lxml-stubs/issues/31#issuecomment-899083523
         self._presentation_xml._template = lxml.etree.Element(
-            f"{{{root.nsmap['p']}}}sldId",
+            f"{{{root.nsmap['p']}}}sldId",  # type: ignore
             {"id": "",
-             f"{{{root.nsmap['r']}}}id": "",
+             f"{{{root.nsmap['r']}}}id": "",  # type: ignore
              }
         )
 
@@ -506,7 +508,7 @@ class Presentation:
 
         The slide *must* be named in the format '(P<stem>.*)-(\d+).png'
         as is created by the call to :func:`extract_slides`.  The slide
-        number is deduced from 
+        number is deduced from the number before the extension.
 
         """
         if not self.files_dir.exists():
@@ -547,7 +549,8 @@ class Presentation:
 
         # Next, the content type
         override = self._content_types.template
-        override.attrib["PartName"] = f"/ppt/{relationship.attrib['Target']}"
+        override.attrib["PartName"] = \
+            f"/ppt/{relationship.attrib['Target']}"  # type:ignore
         self._content_types.etree.getroot().append(override)
 
         # And finally, link them in the presentation
@@ -555,8 +558,9 @@ class Presentation:
         sId = int(match.group("slide")) + 256
         root = self._presentation_xml.etree.getroot()
         sldId.attrib["id"] = f"{sId}"
-        sldId.attrib[f"{{{root.nsmap['r']}}}id"] = f"rId{rId}"
-        root.find(f"{{{root.nsmap['p']}}}sldIdLst").append(sldId)
+        sldId.attrib[f"{{{root.nsmap['r']}}}id"] = f"rId{rId}"  # type: ignore
+        root.find(f"{{{root.nsmap['p']}}}sldIdLst"  # type: ignore
+                  ).append(sldId)
 
     def add_notes(self, text: str, slide: int) -> None:
         """Add the given text as notes to the specified slide.
@@ -588,6 +592,8 @@ class Presentation:
             If aspect is not in :data:`ASPECT_RATIOS`.
         NotImplementedError:
             To protect against version skew.
+        AssertionError:
+            If the slide size entry cannot be found.
 
         """
         if aspect not in ASPECT_RATIOS:
@@ -596,14 +602,15 @@ class Presentation:
                 f"invalid aspect {aspect}"
             )
 
+        root = self._presentation_xml.etree.getroot()
+        elem = root.find(f"{{{root.nsmap['p']}}}sldSz")  # type: ignore
+        assert elem is not None
         if aspect == "4:3":
             pass
         elif aspect == "16:9":
-            root = self._presentation_xml.etree.getroot()
-            elem = root.find(f"{{{root.nsmap['p']}}}sldSz")
             elem.attrib["cx"] = "12192000"
             elem.attrib["cy"] = "6858000"
-            elem.attrib.pop("type")
+            elem.attrib.pop("type")  # type: ignore
         else:
             raise NotImplementedError(
                 f"'{type(self).__name__}.adjust_aspect_ratio' "
