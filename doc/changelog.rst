@@ -7,7 +7,7 @@ The format is based on `Keep a Changelog`_.
 Unreleased_
 -----------
 
-0.0.1_ 2021-09-12
+0.0.1_ 2021-09-14
 -----------------
 
 -   Initial release
