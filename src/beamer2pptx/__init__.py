@@ -233,7 +233,8 @@ def extract_notes(path: Union[PathLike, str],
         logger.error(f"Error message: '{proc.stderr}'")
         raise
 
-    return proc.stdout.split("\f")
+    # Skip the last one which is just the trailing formfeed.
+    return proc.stdout.split("\f")[:-1]
 
 
 def extract_slides(path: Union[PathLike, str],

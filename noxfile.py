@@ -66,7 +66,7 @@ def test(session):
     Alternate flags can be passed to ``pytest`` using the positional
     arguments.
     """
-    session.install("pytest")
+    session.install("pytest", "scons")
     setup_environment(session)
     if session.posargs:
         tests = session.posargs
