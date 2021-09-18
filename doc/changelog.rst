@@ -7,6 +7,11 @@ The format is based on `Keep a Changelog`_.
 Unreleased_
 -----------
 
+Fixed
+^^^^^
+
+-   Corrected the sorting of the slides before insertion
+
 0.0.1_ 2021-09-14
 -----------------
 

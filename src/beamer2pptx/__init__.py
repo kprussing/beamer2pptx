@@ -656,7 +656,7 @@ def convert(slides: Union[PathLike, str],
             images = extract_slides(slides, pres.media_dir, timeout)
 
             logger.info("Generate the XML for each slide")
-            for image in images:
+            for image in sorted(images):
                 pres.add_slide(image)
 
             logger.info("Add the notes to the proper slides")
