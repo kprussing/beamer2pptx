@@ -7,6 +7,11 @@ The format is based on `Keep a Changelog`_.
 Unreleased_
 -----------
 
+Changed
+^^^^^^^
+
+-   Dropped Python 3.6 support
+
 Fixed
 ^^^^^
 
