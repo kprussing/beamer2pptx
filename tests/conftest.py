@@ -1,3 +1,4 @@
+import logging
 import pathlib
 import shutil
 import subprocess
@@ -94,8 +95,17 @@ def pdf_inputs(pdf_dir, author, title, note_texts, tex_inputs):
                    listed="\n".join([fr"\item {_}" for _ in note_texts])
                    )
         )
-    subprocess.run(["scons", f"--file={sconstruct}"],
-                   check=True,
-                   cwd=pdf_dir
-                   )
+    proc = subprocess.run(["scons", f"--file={sconstruct}"],
+                          check=True,
+                          cwd=pdf_dir,
+                          capture_output=True,
+                          text=True,
+                          )
+    logger = logging.getLogger("pdf_inputs")
+    if proc.stdout != "":
+        logger.info(proc.stdout)
+
+    if proc.stderr != "":
+        logger.error(proc.stderr)
+
     yield [_.with_suffix(".pdf") for _ in tex_inputs]
