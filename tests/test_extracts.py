@@ -1,3 +1,4 @@
+import pathlib
 import shutil
 
 import pytest
@@ -19,13 +20,17 @@ def test_extract_metadata(pdf_inputs, title, author):
 
 def test_extract_notes(pdf_inputs, note_texts):
     result = beamer2pptx.extract_notes(pdf_inputs[1])
-    assert len(result) == 3
+    assert len(result) == 2
     assert result[0].rstrip() == ". ".join(note_texts)
     assert result[1].rstrip() == "\n".join([fr"• {_}" for _ in note_texts])
 
 
 def test_extract_slides(pdf_inputs, tmp_path):
     result = beamer2pptx.extract_slides(pdf_inputs[0], tmp_path)
-    assert len(result) == 3
-    for _ in result:
-        _.unlink()
+    try:
+        assert len(result) == 3
+    except AssertionError:
+        raise
+    finally:
+        for _ in result:
+            pathlib.Path(_).unlink()
