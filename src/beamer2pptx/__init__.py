@@ -27,8 +27,12 @@ logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 
 ASPECT_RATIOS = {
-    "4:3": 4 / 3,
-    "16:9": 16 / 9,
+    "4:3": (pptx.util.Emu(9144000),
+            pptx.util.Emu(6858000)
+            ),
+    "16:9": (pptx.util.Emu(12192000),
+             pptx.util.Emu(6858000)
+             )
 }
 """The known valid aspect ratios."""
 
@@ -96,7 +100,8 @@ def extract_aspect_ratio(path: Union[PathLike, str],
         )
 
     ratio = float(match.group(1)) / float(match.group(2))
-    for key, value in ASPECT_RATIOS.items():
+    for key, (width, height) in ASPECT_RATIOS.items():
+        value = width / height
         if round(value, ndigits=4) == round(ratio, ndigits=4):
             return key
 
@@ -347,11 +352,8 @@ def convert(slides: Union[PathLike, str],
 
     logger.info("Adjust the aspect ratio")
     aspect = extract_aspect_ratio(slides)
-    if aspect == "4:3":
-        pass
-    elif aspect == "16:9":
-        pres.slide_width = pptx.util.Emu(12192000)
-        pres.slide_height = pptx.util.Emu(6858000)
+    if aspect in ASPECT_RATIOS:
+        pres.slide_width, pres.slide_height = ASPECT_RATIOS[aspect]
     else:
         raise NotImplementedError(
             f"'{logger.name}' unknown aspect ration {aspect}"
