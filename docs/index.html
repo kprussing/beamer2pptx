@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>The beamer2pptx Documentation &#8212; Beamer to PowerPoint Converter 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/kpruss.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="beamer2pptx API" href="api.html" /> 
+  </head><body>
+<div class="wrapper-masthead">
+  <div class="kpruss-container">
+    <header class="masthead clearfix">
+        <a href="#" class="site-avatar"><img src="https://avatars.githubusercontent.com/kprussing" /></a>
+
+      <div class="site-info">
+          <h1 class="site-name">
+            <a href="#">Beamer to PowerPoint Converter</a>
+          </h1>
+      </div>
+
+      
+    </header>
+  </div>
+</div>
+
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">The beamer2pptx Documentation</a><ul>
+<li><a class="reference internal" href="#convert-a-beamer-presentation-to-powerpoint">Convert a Beamer Presentation to PowerPoint</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#licensing">Licensing</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Next topic</h4>
+  <p class="topless"><a href="api.html"
+                        title="next chapter">beamer2pptx API</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+<div class="kpruss-container">
+  
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="the-beamer2pptx-documentation">
+<h1>The beamer2pptx Documentation<a class="headerlink" href="#the-beamer2pptx-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">beamer2pptx API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#beamer2pptx">beamer2pptx</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">Unreleased</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id1">0.0.1 2021-09-14</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="convert-a-beamer-presentation-to-powerpoint">
+<h2>Convert a Beamer Presentation to PowerPoint<a class="headerlink" href="#convert-a-beamer-presentation-to-powerpoint" title="Permalink to this headline">¶</a></h2>
+<p>This project is yet another attempt at getting a presentation generated
+using beamer to be presentable using PowerPoint or Keynote to gain
+access to the additional presentation features of those programs.
+Notable tools for accomplishing this task include <a class="reference external" href="https://github.com/ashafaei/pdf2pptx">pdf2pptx</a> and
+<a class="reference external" href="https://www.cs.hmc.edu/~oneill/freesoftware/pdftokeynote.html">pdf2keynote</a>.  However, these programs are either platform specific in
+the case of pdf2keynote or do not transfer all of the details I desire
+such as the presenter notes or are not in a library like format in the
+case of pdf2pptx.  This package aims to improve upon the current state
+of the art by refactoring the base logic into a usable library with a
+command line interface.  In fact, the base logic for the substitutions
+to insert the slides was derived from pdf2pptx’s implementation.</p>
+<p>The major differences in this project are:</p>
+<ul class="simple">
+<li><p>It is written as a Python package with the bulk of the logic
+available to other programs and provides a centralized command line
+interface once installed.</p></li>
+<li><p>It uses the PDF inspection tools <em class="manpage">pdftocairo</em> to extra the
+slides as images, <em class="manpage">pdfinfo</em> to get the metadata and the
+aspect ratio, and <em class="manpage">pdftotext</em> to extract the notes pages.
+These tools are described by <a class="reference external" href="https://www.xpdfreader.com/download.html">XpdfReader</a> but are also available
+through <a class="reference external" href="https://poppler.freedesktop.org/releases.html">Poppler</a>.</p></li>
+<li><p>It places the presenter notes in the file for use during the
+presentation.</p></li>
+<li><p>It directly manipulates the PowerPoint presentation using
+<a class="reference external" href="https://python-pptx.readthedocs.io/en/latest/index.html">python-pptx</a> to avoid <a class="reference external" href="https://stackoverflow.com/a/1732454/4249913">parsing XML with regular expressions</a>.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This project is currently in a proof of concept stage.  Not
+all of the above features have been implemented at this time.</p>
+</div>
+<section id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
+<p>To install, run</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python -m pip install https://github.com/kprussing/beamer2pptx.git
+</pre></div>
+</div>
+</section>
+<section id="usage">
+<h3>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h3>
+<p>The basic usage to convert a beamer to a presentation is</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>beamer2pptx presentation.pdf
+</pre></div>
+</div>
+<p>This will create the file <code class="docutils literal notranslate"><span class="pre">presentation.pptx</span></code> in the same directory as
+the original file.  To specify a different output file, you can use the
+<code class="docutils literal notranslate"><span class="pre">--output</span></code> option</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>beamer2pptx --output output.pptx presentation.pdf
+</pre></div>
+</div>
+<p>To add notes, recompile the presentation in with the following in the
+preamble</p>
+<div class="highlight-latex notranslate"><div class="highlight"><pre><span></span><span class="k">\setbeameroption</span><span class="nb">{</span>show only notes<span class="nb">}</span>
+<span class="k">\setbeamertheme</span><span class="nb">{</span>note page<span class="nb">}</span>[plain]
+</pre></div>
+</div>
+<p>Then create a text file that lists the frames to which to assign the
+notes (one per line) and run the command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>beamer2pptx --map mapping.txt --notes notes.pdf presentation.pdf
+</pre></div>
+</div>
+</section>
+<section id="licensing">
+<h3>Licensing<a class="headerlink" href="#licensing" title="Permalink to this headline">¶</a></h3>
+<p>This project is licensed under the open source MIT license.  See
+LICENSE.rst for full details.</p>
+</section>
+</section>
+<section id="indices-and-tables">
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+</div>
+      <div class="clearer"></div>
+    </div>
+  <div class="wrapper-footer">
+    <div class="kpruss-container">
+      <footer class="footer">
+          <a href="mailto: kprussing74@gmail.com">
+              <img src="_static/email.svg" alt="email">
+          </a>
+          <a href="https://github.com/kprussing">
+              <img src="_static/github.svg" alt="GitHub">
+          </a>
+          <a href="https://linkedin.com/in/kprussing">
+              <img src="_static/linkedin.png" alt="LinkedIn" width="40px" height="40px">
+          </a>
+          <a href="https://stackoverflow.com/users/4249913">
+              <img src="_static/stackoverflow.svg" alt="Stack Overflow">
+          </a>
+        
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Keith F. Prussing.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+    </div>
+      </footer>
+    </div>
+  </div>
+  </body>
+</html>
