@@ -41,9 +41,9 @@ def _main(arguments: Optional[Sequence[str]] = None) -> None:
     parser.add_argument("-i", "--interactive", action="store_true",
                         help="Ask before overwriting an existing file")
     parser.add_argument("-m", "--map", type=argparse.FileType("r"),
-                        help=argparse.SUPPRESS)
+                        help="The path to the note mapping")
     parser.add_argument("-n", "--notes", type=argparse.FileType("rb"),
-                        help=argparse.SUPPRESS)
+                        help="The path to the presentation notes")
     parser.add_argument("-o", "--output",
                         help="The path to the output PowerPoint file.")
     parser.add_argument("-v", "--verbose", action="count",
@@ -95,4 +95,5 @@ def _main(arguments: Optional[Sequence[str]] = None) -> None:
 
     convert(args.pdf.name, output,
             args.notes if args.notes is None else args.notes.name,
+            mapping,
             )

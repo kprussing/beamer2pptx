@@ -17,6 +17,7 @@ import pptx
 from typing import (
     List,
     Optional,
+    Sequence,
     Tuple,
     Union,
 )
@@ -296,6 +297,7 @@ def extract_slides(path: Union[PathLike, str],
 def convert(slides: Union[PathLike, str],
             output: Union[PathLike, str],
             notes: Optional[Union[PathLike, str]] = None,
+            notes_map: Sequence[int] = [],
             timeout: Optional[float] = None,
             ) -> None:
     """Convert the presentation to PowerPoint.
@@ -309,6 +311,8 @@ def convert(slides: Union[PathLike, str],
         The path to the generated PowerPoint.
     notes: path-like, optional
         The path to the notes PDF.
+    notes_map: sequence of integers, optional
+        The slides to which to assign the notes.
     timeout: float, optional
         The timeout to pass to subroutines.
 
@@ -321,6 +325,18 @@ def convert(slides: Union[PathLike, str],
         If a call to one of the subroutines errors.
     NotImplementedError:
         If the aspect ratio is unknown.
+    ValueError:
+        If notes_map is present and not the same length as the notes.
+
+    Notes
+    -----
+
+    The ``notes_map`` indicates which slides to which to assign the
+    notes in the presentation.  It it is not present, the notes are
+    assigned to the slides starting at the beginning and ending when no
+    notes are left.  If it is present, it must be the same length as the
+    number of notes slides extracted from ``notes``.  Each entry in
+    ``notes_map`` is the slide (zero based) to which to add the notes.
 
     """
     logger = logging.getLogger(f"{__name__}.convert")
@@ -344,13 +360,35 @@ def convert(slides: Union[PathLike, str],
             f"'{logger.name}' unknown aspect ration {aspect}"
         )
 
+    logger.info("Extract the notes")
+    notes_text = [] if notes is None else extract_notes(notes, timeout)
+    logger.debug(f"Found {len(notes_text)} notes")
+    if len(notes_map) == 0:
+        notes_map = range(len(notes_text))
+
+    if len(notes_map) != len(notes_text):
+        raise ValueError(
+            f"'{logger.name}' incompatible note slides to mapping "
+            f"({len(notes_text)} vs. {len(notes_map)})"
+        )
+
     BLANK_SLIDE = pres.slide_layouts[6]
     with tempfile.TemporaryDirectory() as temp:
         logger.info("Generate the slide images")
         images = extract_slides(slides, temp, timeout)
 
-        for image in sorted(images):
+        if len(notes_text) > len(images):
+            logger.warn(
+                f"More notes found than slides "
+                f"({len(notes_text)} vs. {len(images)})"
+            )
+
+        for count, image in enumerate(sorted(images)):
             slide = pres.slides.add_slide(BLANK_SLIDE)
             slide.shapes.add_picture(image, 0, 0, width=pres.slide_width)
+            if count in notes_map:
+                slide.notes_slide.notes_text_frame.text = notes_text[
+                    notes_map.index(count)
+                ]
 
     pres.save(output)

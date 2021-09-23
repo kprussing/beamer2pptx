@@ -7,6 +7,11 @@ The format is based on `Keep a Changelog`_.
 Unreleased_
 -----------
 
+Added
+^^^^^
+
+-   Notes to the generated slides
+
 Changed
 ^^^^^^^
 
