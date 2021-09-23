@@ -25,11 +25,8 @@ The major differences in this project are:
     through Poppler_.
 -   It places the presenter notes in the file for use during the
     presentation.
--   I reads and directly manipulates the XML files within the PowerPoint
-    using lxml_ to avoid `parsing XML with regular expressions`_.
--   It uses a true temporary directory to build the files for the
-    PowerPoint presentation to avoid interference and to ensure an error
-    does not leave additional cruft on the file system.
+-   It directly manipulates the PowerPoint presentation using
+    python-pptx_ to avoid `parsing XML with regular expressions`_.
 
 .. note:: This project is currently in a proof of concept stage.  Not
    all of the above features have been implemented at this time.
@@ -38,8 +35,8 @@ The major differences in this project are:
 .. _pdf2keynote: https://www.cs.hmc.edu/~oneill/freesoftware/pdftokeynote.html
 .. _XpdfReader: https://www.xpdfreader.com/download.html
 .. _Poppler: https://poppler.freedesktop.org/releases.html
+.. _python-pptx: https://python-pptx.readthedocs.io/en/latest/index.html
 .. _parsing XML with regular expressions: https://stackoverflow.com/a/1732454/4249913
-.. _lxml: https://lxml.de
 
 Installation
 ------------
@@ -86,4 +83,4 @@ Licensing
 ---------
 
 This project is licensed under the open source MIT license.  See
-LICENSE.rst_ for full details.
+LICENSE.rst for full details.
