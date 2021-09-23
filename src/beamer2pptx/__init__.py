@@ -295,11 +295,10 @@ def extract_slides(path: Union[PathLike, str],
 
 
 def convert(slides: Union[PathLike, str],
-            output: Union[PathLike, str],
             notes: Optional[Union[PathLike, str]] = None,
             notes_map: Sequence[int] = [],
             timeout: Optional[float] = None,
-            ) -> None:
+            ) -> pptx.Presentation:
     """Convert the presentation to PowerPoint.
 
     Parameters
@@ -307,8 +306,6 @@ def convert(slides: Union[PathLike, str],
 
     slides: path-like
         The path to the slides PDF.
-    output: path-like
-        The path to the generated PowerPoint.
     notes: path-like, optional
         The path to the notes PDF.
     notes_map: sequence of integers, optional
@@ -391,4 +388,4 @@ def convert(slides: Union[PathLike, str],
                     notes_map.index(count)
                 ]
 
-    pres.save(output)
+    return pres

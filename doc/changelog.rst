@@ -17,6 +17,7 @@ Changed
 
 -   Dropped Python 3.6 support
 -   Switch to python-pptx_ for presentation management
+-   Moved the saving of the presentation to the main routine
 
 Fixed
 ^^^^^

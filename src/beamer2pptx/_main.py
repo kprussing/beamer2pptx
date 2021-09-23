@@ -93,7 +93,8 @@ def _main(arguments: Optional[Sequence[str]] = None) -> None:
                 sys.exit(f"Could not convert '{_}' on line {line} to "
                          "an integer")
 
-    convert(args.pdf.name, output,
-            args.notes if args.notes is None else args.notes.name,
-            mapping,
-            )
+    pres = convert(args.pdf.name,
+                   args.notes if args.notes is None else args.notes.name,
+                   mapping,
+                   )
+    pres.save(output)
