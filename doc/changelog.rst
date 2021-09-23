@@ -11,6 +11,7 @@ Changed
 ^^^^^^^
 
 -   Dropped Python 3.6 support
+-   Switch to python-pptx_ for presentation management
 
 Fixed
 ^^^^^
@@ -25,3 +26,4 @@ Fixed
 .. _Unreleased: https://github.com/kprussing/beamer2pptx/compare/v0.0.1...HEAD
 .. _0.0.1: https://github.com/kprussing/beamer2pptx/releases/tag/v0.0.1
 .. _Keep a Changelog: https://keepachangelog.com/en/1.0.0/
+.. _python-pptx: https://python-pptx.readthedocs.io/en/latest/index.html
