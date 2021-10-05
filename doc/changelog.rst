@@ -19,6 +19,7 @@ Changed
 -   Switch to python-pptx_ for presentation management
 -   Moved the saving of the presentation to the main routine
 -   Moved the slide widths and heights to the ASPECT_RATIO
+-   Moved the build/test/install requirements to the proper locations
 
 Fixed
 ^^^^^
