@@ -10,14 +10,14 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-import configparser
+
+from importlib import metadata
 import pathlib
 import sys
 
-root = pathlib.Path(__file__).parent.parent
-parser = configparser.ConfigParser(empty_lines_in_values=True)
-parser.read(root / "setup.cfg")
+import toml
 
+root = pathlib.Path(__file__).parent.parent
 try:
     import beamer2pptx
 except ModuleNotFoundError:
@@ -26,11 +26,12 @@ except ModuleNotFoundError:
 
 # -- Project information -----------------------------------------------------
 
-project = parser.get("build_sphinx", "project")
-author = parser.get("metadata", "author")
-copyright = "2021, " + author
-release = parser.get("metadata", "version")
-version = ".".join(release.split(".")[:2])
+config = toml.load(root / "pyproject.toml")
+project = config["project"]["name"]
+author = config["project"]["authors"][0]["name"]
+version = metadata.version("beamer2pptx")
+release = version
+copyright = version.split(".")[0] + ", " + author
 
 # -- General configuration ---------------------------------------------------
 
