@@ -1,1 +1,1 @@
-recursive-include src *.pptx
+prune docs

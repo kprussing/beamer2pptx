@@ -1,3 +1,69 @@
 [build-system]
-requires = ["setuptools>=42","wheel"]
+requires = ["setuptools>=61", "setuptools-scm", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "beamer2pptx"
+description = "Convert beamer presentation to PowerPoint"
+readme = "README.rst"
+requires-python = ">=3.7"
+license = {file = "LICENSE.rst"}
+authors = [
+    {name = "Keith F. Prussing", email = "kprussing74@gmail.com"},
+]
+keywords = [
+    "beamer",
+    "PowerPoint",
+    "presentation",
+]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Environment :: Console",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Education",
+    "Topic :: Multimedia :: Graphics :: Presentation",
+    "Topic :: Utilities`",
+    "Typing ::Typed",
+]
+dependencies = [
+    "python-pptx>=0.6.21",
+]
+dynamic = ["version"]
+
+[project.urls]
+homepage = "https://kprussing.github.io/beamer2pptx/"
+repository = "https://github.com/kprussing/beaner2pptx.git"
+changelog = "https://github.com/kprussing/beamer2pptx/blob/trunk/doc/changelog.rst"
+
+[project.optional-dependencies]
+lint = [
+    "flake8",
+    "mypy",
+]
+test = [
+    "pytest",
+    "scons",
+]
+docs = [
+    "sphinx",
+    "kpruss",
+]
+dev = [
+    "nox",
+    "toml",
+    "beamer2pptx[lint]",
+    "beamer2pptx[test]",
+    "beamer2pptx[docs]",
+]
+
+[project.scripts]
+beamer2pptx = "beamer2pptx._main:_main"
+
+[tool.setuptools_scm]

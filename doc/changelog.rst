@@ -7,6 +7,11 @@ The format is based on `Keep a Changelog`_.
 Unreleased_
 -----------
 
+Changed
+^^^^^^^
+
+-   Migrated to pyproject.toml build
+
 2023.2.12_ 2022-02-12
 ---------------------
 
