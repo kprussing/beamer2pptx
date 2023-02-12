@@ -2,6 +2,7 @@ import pytest
 
 import beamer2pptx
 
+
 def test_convert_no_notes(pdf_inputs, aspect_ratio):
     """Check the conversion without notes"""
     slides, _ = pdf_inputs

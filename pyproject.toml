@@ -46,6 +46,9 @@ changelog = "https://github.com/kprussing/beamer2pptx/blob/trunk/doc/changelog.r
 lint = [
     "flake8",
     "mypy",
+    "nox",
+    "pytest",
+    "types-toml",
 ]
 test = [
     "pytest",

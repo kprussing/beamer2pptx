@@ -1,7 +1,4 @@
 import pathlib
-import shutil
-
-import pytest
 
 import beamer2pptx
 
