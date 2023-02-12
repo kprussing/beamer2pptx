@@ -7,6 +7,14 @@ The format is based on `Keep a Changelog`_.
 Unreleased_
 -----------
 
+2023.2.12_ 2022-02-12
+---------------------
+
+Changed
+^^^^^^^
+
+-   Migrate to date based version
+
 0.1.0_ 2021-09-23
 -----------------
 
@@ -34,7 +42,8 @@ Fixed
 
 -   Initial release
 
-.. _Unreleased: https://github.com/kprussing/beamer2pptx/compare/v0.1.0...HEAD
+.. _Unreleased: https://github.com/kprussing/beamer2pptx/compare/2023.2.12...HEAD
+.. _2023.2.12: https://github.com/kprussing/beamer2pptx/releases/tag/2023.2.12
 .. _0.1.0: https://github.com/kprussing/beamer2pptx/releases/tag/v0.1.0
 .. _0.0.1: https://github.com/kprussing/beamer2pptx/releases/tag/v0.0.1
 .. _Keep a Changelog: https://keepachangelog.com/en/1.0.0/
