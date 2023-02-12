@@ -5,43 +5,28 @@ import shutil
 
 import keyring
 import nox
-import setuptools
+import toml
 
-config = setuptools.config.read_configuration(
-    pathlib.Path(__file__).parent / "setup.cfg"
-)
+config = toml.load(pathlib.Path(__file__).parent / "pyproject.toml")
 
 # Set the default sessions to run
 pythons = [v.split(":")[-1].strip()
-           for v in config["metadata"]["classifiers"]
+           for v in config["project"]["classifiers"]
            if re.search(r"Python\s*::\s*\d+[.]\d+\s*$", v)]
 nox.options.sessions = [
-    "flake8",
-    "mypy",
+    "lint",
     *["test-" + x for x in pythons],
     "docs"
 ]
-
-
-@nox.session
-def flake8(session):
-    """Run the flake8"""
-    session.install("flake8")
-    session.run("flake8", "src", "noxfile.py")
-
-
-@nox.session
-def mypy(session):
-    """Run mypy"""
-    session.install("mypy")
-    session.run("mypy", "src", "noxfile.py")
+nox.options.reuse_existing_virtualenvs = True
 
 
 @nox.session
 def lint(session):
     """Run the linters"""
-    flake8(session)
-    mypy(session)
+    session.install(*config["project"]["optional-dependencies"]["lint"])
+    session.run("flake8", "src", "tests", "noxfile.py")
+    session.run("mypy", "src", "tests", "noxfile.py")
 
 
 @nox.session(python=pythons,
@@ -52,10 +37,8 @@ def test(session):
     Alternate flags can be passed to ``pytest`` using the positional
     arguments.
     """
-    deps = config["options"]["install_requires"]
-    deps.extend(config["options"]["extras_require"].get("tests", []))
-    if deps != []:
-        session.install(*deps)
+    session.install(*config["project"]["dependencies"],
+                    *config["project"]["optional-dependencies"]["test"])
 
     session.install(".")
     if session.posargs:
@@ -69,10 +52,8 @@ def test(session):
 @nox.session
 def docs(session):
     """Build the documentation"""
-    deps = config["options"]["install_requires"]
-    deps.extend(config["options"]["extras_require"].get("docs", []))
-    if deps != []:
-        session.install(*deps)
+    session.install(*config["project"]["dependencies"],
+                    *config["project"]["optional-dependencies"]["docs"])
 
     session.install(".")
     root = pathlib.Path(__file__).parent
