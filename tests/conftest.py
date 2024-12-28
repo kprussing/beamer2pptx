@@ -28,7 +28,10 @@ def aspect_ratio(request):
 @pytest.fixture(scope="session")
 def pdf_dir(tmp_path_factory):
     pdf_dir = tmp_path_factory.mktemp("pdf_dir")
+    print(pdf_dir.resolve())
+    assert False
     yield pdf_dir
+    shutil.copytree(pdf_dir, "example")
     shutil.rmtree(pdf_dir)
 
 

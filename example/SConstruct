@@ -1,0 +1,6 @@
+env = Environment(tools=["default", "beamer2pptx.scons"])
+
+env.PDF('presentation-16:9.tex')
+env.PDF('notes-16:9.tex')
+env.PDF('presentation-4:3.tex')
+env.PDF('notes-4:3.tex')

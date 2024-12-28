@@ -1,11 +1,12 @@
-=============================
-The beamer2pptx Documentation
-=============================
+==============================
+Beamer to PowerPoint Converter
+==============================
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   self
    api
    changelog
 
