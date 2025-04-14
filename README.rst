@@ -70,7 +70,7 @@ preamble
 .. code-block:: latex
 
     \setbeameroption{show only notes}
-    \setbeamertheme{note page}[plain]
+    \setbeamertemplate{note page}[plain]
 
 Then create a text file that lists the frames to which to assign the
 notes (one per line) and run the command
